@@ -16,4 +16,4 @@ require('ts-node').register({
     project: __dirname
 });
 
-require('./lib/cli/cli.ts');
+require('./lib/cli.ts');

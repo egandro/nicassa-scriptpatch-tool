@@ -1,6 +1,6 @@
-import { ScriptPatchTool } from '../../lib/scriptpatchtool';
-import { ScriptPatch, PatchStep, PatchStepType} from '../../lib/data/scriptpatch';
-import { WorkingSet } from '../../lib/data/workingset';
+import { ScriptPatchTool } from '../../src/scriptpatchtool';
+import { ScriptPatch, PatchStep, PatchStepType} from '../../src/data/scriptpatch';
+import { WorkingSet } from '../../src/data/workingset';
 
 describe('ScriptPatchTool', () => {
 

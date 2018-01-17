@@ -1,8 +1,7 @@
-let fs = require('fs');
 let process = require('process');
 
-import { WorkingSet } from '../../../lib/data/workingset';
-import { ScriptPatchTool } from '../../../lib/scriptpatchtool';
+import { WorkingSet } from '../../src/data/workingset';
+import { ScriptPatchTool } from '../../src/scriptpatchtool';
 
 export class Patch {
     fileName: string;
