@@ -31,6 +31,11 @@ export class ScriptPatchTool {
         return result;
     }
 
+    static save(ws: WorkingSet) {
+        const data: any = JSON.stringify(ws.scriptPatch, null, 2);
+        fs.writeFileSync(data, ws.fileName, { encoding: 'utf-8' });
+    }
+
     static run(ws: WorkingSet, dry: boolean): ScriptPatchToolResult {
         const result = ScriptPatchTool.preview(ws);
         if (dry) {
