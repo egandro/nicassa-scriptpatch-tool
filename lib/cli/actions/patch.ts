@@ -1,8 +1,8 @@
 let fs = require('fs');
 let process = require('process');
 
-import { WorkingSet } from '../persistance/workingset';
-import { ScriptPatch } from '../persistance/scriptpatch';
+import { WorkingSet } from '../../data/workingset';
+import { ScriptPatch } from '../../data/scriptpatch';
 
 export class Patch {
     workingSet: WorkingSet
@@ -24,8 +24,6 @@ export class Patch {
             scriptPatch: scriptPatch
         }
     }
-
-
 }
 
 export default function run(opts: any) {

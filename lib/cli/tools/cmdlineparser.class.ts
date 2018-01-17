@@ -18,7 +18,7 @@ export class CmdLineParser {
             action = null;
         } else {
             action = {
-                module: '../lib/actions/' + opts[0],
+                module: '../../lib/cli/actions/' + opts[0],
                 opts: opts
             };
         }
