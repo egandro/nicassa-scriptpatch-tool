@@ -1,5 +1,5 @@
-let fs = require('fs');
-let path = require('path');
+import * as fs from 'fs';
+import * as path from 'path';
 
 import { PatchStep, PatchStepType } from './data/scriptpatch';
 import { WorkingSet } from './data/workingset';

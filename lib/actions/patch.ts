@@ -1,4 +1,4 @@
-let process = require('process');
+import * as process from 'process';
 
 import { WorkingSet } from '../../src/data/workingset';
 import { ScriptPatchTool } from '../../src/scriptpatchtool';
