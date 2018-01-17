@@ -12,17 +12,12 @@ export class Patch {
         this.fileName = opts.file;
         this.dry = opts.dry;
 
-        if (!fs.existsSync(this.fileName)) {
-            console.error('error: can\'t read file "' + this.fileName + '"');
+        let ws: WorkingSet = <any>null;
+        try {
+            ws = ScriptPatchTool.load(this.fileName);
+        } catch(err) {
+            console.error(err);
             process.exit(-1);
-        }
-
-        const str = fs.readFileSync(this.fileName);
-        const scriptPatch: any = JSON.parse(str);
-
-        const ws: WorkingSet = {
-            fileName: this.fileName,
-            scriptPatch: scriptPatch
         }
 
         const result = ScriptPatchTool.run(ws, this.dry);

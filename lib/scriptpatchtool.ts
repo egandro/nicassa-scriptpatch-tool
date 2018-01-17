@@ -12,9 +12,24 @@ export interface ScriptPatchToolResult {
 }
 
 export class ScriptPatchTool {
-
     static BRANDING = "-- Patched with ScriptPatchTool";
     static ENCODING = 'latin1';
+
+    static load(fileName: string): WorkingSet {
+        if (!fs.existsSync(fileName)) {
+            throw new Error('error: can\'t read file "' + fileName + '"');
+        }
+
+        const str = fs.readFileSync(fileName);
+        const scriptPatch: any = JSON.parse(str);
+
+        const result: WorkingSet = {
+            fileName: fileName,
+            scriptPatch: scriptPatch
+        }
+
+        return result;
+    }
 
     static run(ws: WorkingSet, dry: boolean): ScriptPatchToolResult {
         const result = ScriptPatchTool.preview(ws);
