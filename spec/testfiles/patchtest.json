@@ -1,0 +1,15 @@
+{
+  "sqlFileName": "testdata.sql.raw",
+  "relativePath": true,
+  "comment": null,
+  "createBranding": true,
+  "stepList": [
+    {
+      "comment": "",
+      "stepType": 5,
+      "searchText": "Some Dummy Text",
+      "replaceText": "txeT ymmuD emoS",
+      "active": true
+    }
+  ]
+}

@@ -3,6 +3,12 @@ import * as parser from 'nomnom';
 export class CmdLineParser {
     public static parse(): any {
         parser.command('patch')
+            .option('dry', {
+                abbr: 'd',
+                flag: true,
+                default: false,
+                help: 'dry run - only check if it can be patched but do not run the patch actions default is'
+            })
             .option('file', {
                 abbr: 'f',
                 metavar: 'patchfile.json',

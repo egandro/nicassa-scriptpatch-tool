@@ -1,15 +1,16 @@
 let fs = require('fs');
 let process = require('process');
 
-import { WorkingSet } from '../../data/workingset';
-import { ScriptPatch } from '../../data/scriptpatch';
+import { WorkingSet } from '../../../lib/data/workingset';
+import { ScriptPatchTool } from '../../../lib/scriptpatchtool';
 
 export class Patch {
-    workingSet: WorkingSet
     fileName: string;
+    dry: boolean;
 
     run(opts: any) {
         this.fileName = opts.file;
+        this.dry = opts.dry;
 
         if (!fs.existsSync(this.fileName)) {
             console.error('error: can\'t read file "' + this.fileName + '"');
@@ -17,11 +18,25 @@ export class Patch {
         }
 
         const str = fs.readFileSync(this.fileName);
-        const scriptPatch: ScriptPatch = JSON.parse(str);
+        const scriptPatch: any = JSON.parse(str);
 
-        this.workingSet = {
+        const ws: WorkingSet = {
             fileName: this.fileName,
             scriptPatch: scriptPatch
+        }
+
+        const result = ScriptPatchTool.run(ws, this.dry);
+        if(result.patched) {
+            if(this.dry) {
+                console.log('content of patch file "' + this.fileName + '" can be patched');
+                process.exit(0);
+            } else {
+                console.log('content of patch file "' + this.fileName + '" patched');
+                process.exit(0);
+            }
+        } else {
+            console.log('content of patch file "' + this.fileName + '" can not be patched or does not need patching');
+            process.exit(-1);
         }
     }
 }
