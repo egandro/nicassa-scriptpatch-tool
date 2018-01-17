@@ -13,7 +13,7 @@ export interface PatchStep {
     stepType: PatchStepType,
     searchText: string,
     replaceText: string,
-    active: string
+    active: boolean
 }
 
 export interface ScriptPatch {
