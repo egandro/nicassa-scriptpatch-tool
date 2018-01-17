@@ -9,6 +9,12 @@ export class CmdLineParser {
                 default: false,
                 help: 'dry run - only check if it can be patched but do not run the patch actions default is'
             })
+            .option('verbose', {
+                abbr: 'v',
+                flag: true,
+                default: false,
+                help: 'verbose print content of the patched file'
+            })
             .option('file', {
                 abbr: 'f',
                 metavar: 'patchfile.json',
@@ -24,7 +30,7 @@ export class CmdLineParser {
             action = null;
         } else {
             action = {
-                module: '../../lib/actions/' + opts[0],
+                module: '../lib/actions/' + opts[0],
                 opts: opts
             };
         }
