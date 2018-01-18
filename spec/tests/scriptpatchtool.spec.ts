@@ -50,6 +50,25 @@ describe('ScriptPatchTool', () => {
 
     }));
 
+    it('it should do no nothing for null search and replace texts', testAsync(async () => {
+        const input = `Nothing`;
+
+        let step: PatchStep =  {
+            comment: '',
+            stepType: PatchStepType.STEP_INSERT_ON_TOP_OF_FILE,
+            searchText: null,
+            replaceText: null,
+            active: true
+        }
+
+        const output = ScriptPatchTool.runSteps(input, [step]);
+
+        expect(output).not.toBeNull();
+        expect(output).not.toBeUndefined();
+        expect(output).toBe(input);
+
+    }));
+
     it('it should do no changes for step type STEP_TYPE_EMPTY', testAsync(async () => {
         const input = `Nothing`;
 

@@ -129,7 +129,7 @@ export class ScriptPatchTool {
             return input;
         }
 
-        let result = '';
+        let result = input;
         let search = step.searchText;
         let replace = step.replaceText;
 
