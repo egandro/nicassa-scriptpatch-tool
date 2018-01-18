@@ -13,7 +13,13 @@ export class CmdLineParser {
                 abbr: 'v',
                 flag: true,
                 default: false,
-                help: 'verbose print content of the patched file'
+                help: 'verbose print status'
+            })
+            .option('log', {
+                abbr: 'l',
+                flag: true,
+                default: false,
+                help: 'print content of the patched file'
             })
             .option('file', {
                 abbr: 'f',

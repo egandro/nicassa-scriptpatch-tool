@@ -8,12 +8,17 @@ export class Patch {
     fileName: string;
     dry: boolean;
     verbose: boolean;
+    log: boolean;
     io: NodeIOAbstraction = new NodeIOAbstraction();
 
     run(opts: any) {
         this.fileName = opts.file;
         this.dry = opts.dry;
         this.verbose = opts.verbose;
+        this.log = opts.log;
+        if(this.log) {
+            this.verbose = true;
+        }
 
         let ws: WorkingSet = <any>null;
         try {
@@ -26,16 +31,22 @@ export class Patch {
         const result = ScriptPatchTool.run(ws, this.dry, this.io);
         if(result.patched) {
             if(this.dry) {
-                console.log('content of patch file "' + this.fileName + '" can be patched');
+                if(this.verbose) {
+                    console.log('content of patch file "' + this.fileName + '" can be patched');
+                }
             } else {
-                console.log('content of patch file "' + this.fileName + '" patched');
+                if(this.verbose) {
+                    console.log('content of patch file "' + this.fileName + '" patched');
+                }
             }
-            if(this.verbose) {
+            if(this.log) {
                 console.log(result.contentAfter);
             }
             process.exit(0);
         } else {
-            console.log('content of patch file "' + this.fileName + '" can not be patched or does not need patching');
+            if(this.verbose) {
+                console.log('content of patch file "' + this.fileName + '" can not be patched or does not need patching');
+            }
             process.exit(-1);
         }
     }
