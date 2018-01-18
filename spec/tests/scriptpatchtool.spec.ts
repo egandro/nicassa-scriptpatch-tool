@@ -1,10 +1,8 @@
 import { ScriptPatchTool } from '../../src/scriptpatchtool';
 import { ScriptPatch, PatchStep, PatchStepType} from '../../src/data/scriptpatch';
 import { WorkingSet } from '../../src/data/workingset';
-import { NodeIOAbstraction } from '../../lib/tools/nodeioabstraction.class';
 
 describe('ScriptPatchTool', () => {
-    const io: NodeIOAbstraction = new NodeIOAbstraction();
 
     beforeEach(testAsync(async () => {
     }));
@@ -225,7 +223,7 @@ describe('ScriptPatchTool', () => {
             scriptPatch: scriptPatch
         }
 
-        const output = ScriptPatchTool.preview(ws, io);
+        const output = ScriptPatchTool.preview(ws);
 
         expect(output).not.toBeNull();
         expect(output).not.toBeUndefined();
@@ -259,7 +257,7 @@ describe('ScriptPatchTool', () => {
             scriptPatch: scriptPatch
         }
 
-        const output = ScriptPatchTool.preview(ws, io);
+        const output = ScriptPatchTool.preview(ws);
 
         expect(output).not.toBeNull();
         expect(output).not.toBeUndefined();
@@ -293,7 +291,7 @@ describe('ScriptPatchTool', () => {
             scriptPatch: scriptPatch
         }
 
-        const output = ScriptPatchTool.preview(ws, io);
+        const output = ScriptPatchTool.preview(ws);
 
         expect(output).not.toBeNull();
         expect(output).not.toBeUndefined();

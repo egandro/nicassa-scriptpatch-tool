@@ -2,14 +2,12 @@ import * as process from 'process';
 
 import { WorkingSet } from '../../src/data/workingset';
 import { ScriptPatchTool } from '../../src/scriptpatchtool';
-import { NodeIOAbstraction } from '../tools/nodeioabstraction.class';
 
 export class Patch {
     fileName: string;
     dry: boolean;
     verbose: boolean;
     log: boolean;
-    io: NodeIOAbstraction = new NodeIOAbstraction();
 
     run(opts: any) {
         this.fileName = opts.file;
@@ -22,13 +20,13 @@ export class Patch {
 
         let ws: WorkingSet = <any>null;
         try {
-            ws = ScriptPatchTool.load(this.fileName, this.io);
+            ws = ScriptPatchTool.load(this.fileName);
         } catch(err) {
             console.error(err);
             process.exit(-1);
         }
 
-        const result = ScriptPatchTool.run(ws, this.dry, this.io);
+        const result = ScriptPatchTool.run(ws, this.dry);
         if(result.patched) {
             if(this.dry) {
                 if(this.verbose) {

@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+
 import { PatchStep, PatchStepType } from './data/scriptpatch';
 import { WorkingSet } from './data/workingset';
 
@@ -5,28 +8,20 @@ export interface ScriptPatchToolResult {
     contentBefore: string;
     contentAfter: string;
     patched: boolean;
+    alreadyPatched: boolean;
     sqlFileFullPath: string;
-}
-
-// needed for electron
-export interface IOAbstraction {
-    readFileSync(fileName: string, encoding: string): string;
-    writeFileSync(fileName: string, data: any, encoding: string): void;
-    normalize(fileName: string): string;
-    dirname(fileName: string): string;
-    existsSync(fileName: string): boolean;
 }
 
 export class ScriptPatchTool {
     static BRANDING = "-- Patched with ScriptPatchTool";
     static ENCODING = 'latin1';
 
-    static load(fileName: string, io: IOAbstraction): WorkingSet {
-        if (!io.existsSync(fileName)) {
+    static load(fileName: string): WorkingSet {
+        if (!fs.existsSync(fileName)) {
             throw new Error('error: can\'t read file "' + fileName + '"');
         }
 
-        const str = io.readFileSync(fileName, 'utf-8');
+        const str = fs.readFileSync(fileName, 'utf-8');
         const scriptPatch: any = JSON.parse(str);
 
         const result: WorkingSet = {
@@ -37,23 +32,23 @@ export class ScriptPatchTool {
         return result;
     }
 
-    static save(ws: WorkingSet, io: IOAbstraction) {
+    static save(ws: WorkingSet) {
         const data: any = JSON.stringify(ws.scriptPatch, null, 2);
-        io.writeFileSync(data, ws.fileName, 'utf-8');
+        fs.writeFileSync(ws.fileName, data, 'utf-8');
     }
 
-    static run(ws: WorkingSet, dry: boolean, io: IOAbstraction): ScriptPatchToolResult {
-        const result = ScriptPatchTool.preview(ws, io);
+    static run(ws: WorkingSet, dry: boolean): ScriptPatchToolResult {
+        const result = ScriptPatchTool.preview(ws);
         if (dry) {
             return result;
         }
         if (result.patched) {
-            io.writeFileSync(result.sqlFileFullPath, result.contentAfter, ScriptPatchTool.ENCODING);
+            fs.writeFileSync(result.sqlFileFullPath, result.contentAfter, ScriptPatchTool.ENCODING);
         }
         return result;
     }
 
-    static preview(ws: WorkingSet, io: IOAbstraction): ScriptPatchToolResult {
+    static preview(ws: WorkingSet): ScriptPatchToolResult {
         if (ws == null || ws === undefined) {
             throw new Error('workingset is not set');
         }
@@ -73,16 +68,16 @@ export class ScriptPatchTool {
         let fileName = ws.scriptPatch.sqlFileName;
 
         if (ws.scriptPatch.relativePath) {
-            fileName = io.dirname(io.normalize(ws.fileName));
+            fileName = path.dirname(path.normalize(ws.fileName));
             fileName = fileName + '/' + ws.scriptPatch.sqlFileName;
-            fileName = io.normalize(fileName);
+            fileName = path.normalize(fileName);
         }
 
-        if (!io.existsSync(fileName)) {
+        if (!fs.existsSync(fileName)) {
             throw new Error('sql file "' + fileName + '" does not exist');
         }
 
-        const str = io.readFileSync(fileName, ScriptPatchTool.ENCODING);
+        const str = fs.readFileSync(fileName, ScriptPatchTool.ENCODING);
         if (str == null || str === undefined) {
             throw new Error('can\'t read sql file "' + fileName + '"');
         }
@@ -91,6 +86,7 @@ export class ScriptPatchTool {
             contentBefore: str,
             contentAfter: str,
             patched: false,
+            alreadyPatched: false,
             sqlFileFullPath: fileName
         }
 
@@ -98,6 +94,8 @@ export class ScriptPatchTool {
             return result;
         }
         if (str.indexOf(ScriptPatchTool.BRANDING) != -1) {
+            // we're already patched...
+            result.alreadyPatched = true;
             return result;
         }
 
