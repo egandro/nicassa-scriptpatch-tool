@@ -5,7 +5,7 @@
   "createBranding": true,
   "stepList": [
     {
-      "comment": "",
+      "comment": "A dummy comment",
       "stepType": 5,
       "searchText": "Some Dummy Text",
       "replaceText": "txeT ymmuD emoS",
