@@ -1,14 +1,18 @@
+const fs = require('fs');
+const endOfLine = require('os').EOL;
 import { ScriptPatchTool } from '../../src/scriptpatchtool';
-import { ScriptPatch, PatchStep, PatchStepType} from '../../src/data/scriptpatch';
+import { ScriptPatch, PatchStep, PatchStepType } from '../../src/data/scriptpatch';
 import { WorkingSet } from '../../src/data/workingset';
 
 describe('ScriptPatchTool', () => {
+
+    let inputDefault = fs.readFileSync(__dirname + '/../testfiles/lorem.txt', 'utf-8');
 
     beforeEach(testAsync(async () => {
     }));
 
     it('it should do no changes for no steps', testAsync(async () => {
-        const input = `Nothing`;
+        const input = inputDefault;
 
         const steps: PatchStep[] = [];
 
@@ -21,7 +25,7 @@ describe('ScriptPatchTool', () => {
     }));
 
     it('it should do no changes for inactive steps', testAsync(async () => {
-        const input = `Nothing`;
+        const input = inputDefault;
 
         const steps: PatchStep[] = [];
         let step: PatchStep = {
@@ -51,9 +55,9 @@ describe('ScriptPatchTool', () => {
     }));
 
     it('it should do no nothing for null search and replace texts', testAsync(async () => {
-        const input = `Nothing`;
+        const input = inputDefault;
 
-        let step: PatchStep =  {
+        const step: PatchStep = {
             comment: '',
             stepType: PatchStepType.STEP_INSERT_ON_TOP_OF_FILE,
             searchText: null,
@@ -70,7 +74,7 @@ describe('ScriptPatchTool', () => {
     }));
 
     it('it should do no changes for step type STEP_TYPE_EMPTY', testAsync(async () => {
-        const input = `Nothing`;
+        const input = inputDefault;
 
         const steps: PatchStep[] = [];
         const step: PatchStep = {
@@ -91,10 +95,10 @@ describe('ScriptPatchTool', () => {
     }));
 
     it('it should insert a text on top for step STEP_INSERT_ON_TOP_OF_FILE', testAsync(async () => {
-        const input = `abcdef`;
-        const expected = `Some Dummy Textabcdef`;
+        const input = fs.readFileSync(__dirname + '/../testfiles/insert_on_top_input.txt', 'utf-8');
+        const expected = fs.readFileSync(__dirname + '/../testfiles/insert_on_top_expected.txt', 'utf-8');
 
-        const searchText = 'Some Dummy Text';
+        const searchText = 'Some Dummy Text' + endOfLine + endOfLine;
         const replaceText: string = <any>null;
         const step: PatchStep = {
             comment: '',
@@ -112,10 +116,10 @@ describe('ScriptPatchTool', () => {
     }));
 
     it('it should insert a text on bottom for step STEP_APPEND_TO_END_OF_FILE', testAsync(async () => {
-        const input = `abcdef`;
-        const expected = `abcdefSome Dummy Text`;
+        const input = fs.readFileSync(__dirname + '/../testfiles/insert_to_end_input.txt', 'utf-8');
+        const expected = fs.readFileSync(__dirname + '/../testfiles/insert_to_end_expected.txt', 'utf-8');
 
-        const searchText = 'Some Dummy Text';
+        const searchText = endOfLine + endOfLine + 'Some Dummy Text' + endOfLine;
         const replaceText: string = <any>null;
         const step: PatchStep = {
             comment: '',
@@ -133,11 +137,12 @@ describe('ScriptPatchTool', () => {
     }));
 
     it('it should insert a text before a search text for step STEP_INSERT_BEFORE_TEXT', testAsync(async () => {
-        const input = `abcdef`;
-        const expected = `abcSome Dummy Textdef`;
+        const input = fs.readFileSync(__dirname + '/../testfiles/insert_before_text_input.txt', 'utf-8');
+        const expected = fs.readFileSync(__dirname + '/../testfiles/insert_before_text_expected.txt', 'utf-8');
 
-        const searchText = 'def';
-        const replaceText = 'Some Dummy Text';
+        const searchText = 'xet justo duo dolores et ea rebum.';
+        const replaceText = endOfLine+ 'Kilroy was here' + endOfLine + endOfLine;
+
         const step: PatchStep = {
             comment: '',
             stepType: PatchStepType.STEP_INSERT_BEFORE_TEXT,
@@ -154,11 +159,12 @@ describe('ScriptPatchTool', () => {
     }));
 
     it('it should insert a text after a search text for step STEP_INSERT_AFTER_TEXT', testAsync(async () => {
-        const input = `abcdef`;
-        const expected = `abcSome Dummy Textdef`;
+        const input = fs.readFileSync(__dirname + '/../testfiles/insert_after_text_input.txt', 'utf-8');
+        const expected = fs.readFileSync(__dirname + '/../testfiles/insert_after_text_expected.txt', 'utf-8');
 
-        const searchText = 'abc';
-        const replaceText = 'Some Dummy Text';
+        const searchText = 'xet justo duo dolores et ea rebum.';
+        const replaceText = endOfLine + endOfLine +  'Kilroy was here' + endOfLine + endOfLine;
+
         const step: PatchStep = {
             comment: '',
             stepType: PatchStepType.STEP_INSERT_AFTER_TEXT,
@@ -175,11 +181,12 @@ describe('ScriptPatchTool', () => {
     }));
 
     it('it should replace a text with a new text for step STEP_REPLACE_TEXT', testAsync(async () => {
-        const input = `abcSome Dummy Textdef`;
-        const expected = `abctxeT ymmuD emoSdef`;
+        const input = fs.readFileSync(__dirname + '/../testfiles/replace_text_input.txt', 'utf-8');
+        const expected = fs.readFileSync(__dirname + '/../testfiles/replace_text_expected.txt', 'utf-8');
 
-        const searchText = 'Some Dummy Text';
-        const replaceText = searchText.split('').reverse().join('');
+        const searchText = 'xet justo duo dolores et ea rebum.';
+        const replaceText = endOfLine + 'Kilroy was here' + endOfLine + endOfLine;
+
         const step: PatchStep = {
             comment: '',
             stepType: PatchStepType.STEP_REPLACE_TEXT,
@@ -196,11 +203,12 @@ describe('ScriptPatchTool', () => {
     }));
 
     it('it should delete a text for step STEP_DELETE_TEXT', testAsync(async () => {
-        const input = `abcSome Dummy Textdef`;
-        const expected = `abcdef`;
+        const input = fs.readFileSync(__dirname + '/../testfiles/delete_text_input.txt', 'utf-8');
+        const expected = fs.readFileSync(__dirname + '/../testfiles/delete_text_expected.txt', 'utf-8');
 
-        const searchText = 'Some Dummy Text';
-        const replaceText: string = <any> null;
+        const searchText = 'xet justo duo dolores et ea rebum.';
+        const replaceText: string = <any>null;
+
         const step: PatchStep = {
             comment: '',
             stepType: PatchStepType.STEP_DELETE_TEXT,
@@ -221,6 +229,7 @@ describe('ScriptPatchTool', () => {
 
         const searchText = 'Some Dummy Text';
         const replaceText = searchText.split('').reverse().join('');
+
         const step: PatchStep = {
             comment: '',
             stepType: PatchStepType.STEP_REPLACE_TEXT,

@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const endOfLine = require('os').EOL;
 
 import { PatchStep, PatchStepType } from './data/scriptpatch';
 import { WorkingSet } from './data/workingset';
@@ -133,14 +134,13 @@ export class ScriptPatchTool {
         let search = step.searchText;
         let replace = step.replaceText;
 
-        // make me cleaner!
         if (search != null) {
-            search = search.replace('\r', '');
-            search = search.replace('\n', '\r\n');
+            search = search.replace(/\r/g, '');
+            search = search.replace(/\n/g, endOfLine);
         }
         if (replace != null) {
-            replace = replace.replace('\r', '');
-            replace = replace.replace('\n', '\r\n');
+            replace = replace.replace(/\r/g, '');
+            replace = replace.replace(/\n/g, endOfLine);
         }
 
         switch (step.stepType) {
@@ -182,7 +182,7 @@ export class ScriptPatchTool {
                     const position = input.indexOf(search);
                     if (position > -1) {
                         const head = input.substr(0, position);
-                        const tail = input.substr(position + replace.length);
+                        const tail = input.substr(position + search.length);
                         result = head + replace + tail;
                     }
                 }
