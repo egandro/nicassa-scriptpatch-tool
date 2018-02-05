@@ -225,7 +225,7 @@ describe('ScriptPatchTool', () => {
     }));
 
     it('it should create a preview', testAsync(async () => {
-        const expected = '-- abctxeT ymmuD emoSdef\n';
+        const expected = '-- abctxeT ymmuD emoSdef' + endOfLine;
 
         const searchText = 'Some Dummy Text';
         const replaceText = searchText.split('').reverse().join('');

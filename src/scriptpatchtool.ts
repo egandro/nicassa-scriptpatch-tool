@@ -11,6 +11,7 @@ export interface ScriptPatchToolResult {
     patched: boolean;
     alreadyPatched: boolean;
     sqlFileFullPath: string;
+    deadPatchSteps: number[];
 }
 
 export class ScriptPatchTool {
@@ -44,7 +45,7 @@ export class ScriptPatchTool {
             return result;
         }
         if (result.patched) {
-            if(outputFileName == null || outputFileName === undefined) {
+            if (outputFileName == null || outputFileName === undefined) {
                 outputFileName = result.sqlFileFullPath;
             }
             fs.writeFileSync(outputFileName, result.contentAfter, ScriptPatchTool.ENCODING);
@@ -91,7 +92,8 @@ export class ScriptPatchTool {
             contentAfter: str,
             patched: false,
             alreadyPatched: false,
-            sqlFileFullPath: fileName
+            sqlFileFullPath: fileName,
+            deadPatchSteps: []
         }
 
         if (ws.scriptPatch == null || ws.scriptPatch === undefined) {
@@ -103,7 +105,7 @@ export class ScriptPatchTool {
             return result;
         }
 
-        result.contentAfter = ScriptPatchTool.runSteps(str, ws.scriptPatch.stepList);
+        ScriptPatchTool.runSteps(str, ws.scriptPatch.stepList, result);
         if (str !== result.contentAfter) {
             // we're patched...
             result.patched = true;
@@ -116,12 +118,24 @@ export class ScriptPatchTool {
         return result;
     }
 
-    static runSteps(input: string, steps: PatchStep[]): string {
-        let result = input;
+    static runSteps(input: string, steps: PatchStep[], result?: ScriptPatchToolResult): string {
+        let text = input;
+        let pos = 0;
         for (const step of steps) {
-            result = ScriptPatchTool.runStep(result, step);
+            const contentAfter = ScriptPatchTool.runStep(text, step);
+            if (text === contentAfter) {
+                // this step did nothing
+                if (result != null && result !== null) {
+                    result.deadPatchSteps.push(pos);
+                }
+            }
+            text = contentAfter;
+            pos++;
         }
-        return result;
+        if (result != null && result !== null) {
+            result.contentAfter = text;
+        }
+        return text;
     }
 
     static runStep(input: string, step: PatchStep): string {
