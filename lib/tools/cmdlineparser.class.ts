@@ -27,6 +27,12 @@ export class CmdLineParser {
                 required: true,
                 help: 'path for to a patchfile.json file [required]'
             })
+            .option('output', {
+                abbr: 'o',
+                metavar: 'outfile.sql',
+                required: false,
+                help: 'optional out file to save the patched file to another file'
+            })
             .help('patches files according to the patchfiles steps');
 
         var opts = parser.parse();

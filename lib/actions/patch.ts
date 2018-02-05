@@ -5,6 +5,7 @@ import { ScriptPatchTool } from '../../src/scriptpatchtool';
 
 export class Patch {
     fileName: string;
+    outputFileName: string;
     dry: boolean;
     verbose: boolean;
     log: boolean;
@@ -14,6 +15,8 @@ export class Patch {
         this.dry = opts.dry;
         this.verbose = opts.verbose;
         this.log = opts.log;
+        this.outputFileName = opts.output;
+
         if(this.log) {
             this.verbose = true;
         }
@@ -26,7 +29,7 @@ export class Patch {
             process.exit(-1);
         }
 
-        const result = ScriptPatchTool.run(ws, this.dry);
+        const result = ScriptPatchTool.run(ws, this.dry, this.outputFileName);
         if(result.patched) {
             if(this.dry) {
                 if(this.verbose) {

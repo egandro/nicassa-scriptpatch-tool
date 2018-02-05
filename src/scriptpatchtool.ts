@@ -38,13 +38,16 @@ export class ScriptPatchTool {
         fs.writeFileSync(ws.fileName, data, 'utf-8');
     }
 
-    static run(ws: WorkingSet, dry: boolean): ScriptPatchToolResult {
+    static run(ws: WorkingSet, dry: boolean, outputFileName?: string): ScriptPatchToolResult {
         const result = ScriptPatchTool.preview(ws);
         if (dry) {
             return result;
         }
         if (result.patched) {
-            fs.writeFileSync(result.sqlFileFullPath, result.contentAfter, ScriptPatchTool.ENCODING);
+            if(outputFileName == null || outputFileName === undefined) {
+                outputFileName = result.sqlFileFullPath;
+            }
+            fs.writeFileSync(outputFileName, result.contentAfter, ScriptPatchTool.ENCODING);
         }
         return result;
     }
