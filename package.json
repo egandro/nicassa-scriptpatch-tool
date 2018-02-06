@@ -1,6 +1,6 @@
 {
   "name": "nicassa-scriptpatch-tool",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "author": "Harald Fielker <harald.fielker@gmail.com>",
   "repository": {
     "type": "git",
@@ -14,7 +14,6 @@
   },
   "main": "index.ts",
   "dependencies": {
-    "crlf-helper": "^0.1.0",
     "nomnom": "^1.8.1",
     "prompt": "^1.0.0",
     "sha.js": "^2.4.9",
