@@ -23,14 +23,14 @@
   },
   "devDependencies": {
     "@types/jasmine": "2.8.2",
-    "@types/node": "^9.3.0",
-    "@types/nomnom": "^0.0.28",
-    "jasmine": "^2.8.0",
-    "jasmine-core": "^2.8.0",
-    "jasmine-node": "^1.14.5",
-    "jasmine-reporters": "^2.2.1",
-    "jasmine-spec-reporter": "^4.2.1",
-    "tslint": "^5.9.1"
+    "@types/node": "9.6.61",
+    "@types/nomnom": "0.0.28",
+    "jasmine": "2.99.0",
+    "jasmine-core": "2.99.1",
+    "jasmine-node": "1.16.2",
+    "jasmine-reporters": "2.5.0",
+    "jasmine-spec-reporter": "4.2.1",
+    "tslint": "5.20.1"
   },
   "scripts": {
     "test": "ts-node --project=spec spec/launcher.ts"
